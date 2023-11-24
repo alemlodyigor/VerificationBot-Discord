@@ -65,4 +65,12 @@ client.on("messageCreate", async (message) => {
   }
 });
 
+client.on("guildMemberAdd", async (member) => {
+  const unverifiedRole = member.guild.roles.cache.find(
+    (role) => role.name === "Unverified"
+  );
+
+  await member.roles.add(unverifiedRole);
+});
+
 client.login(process.env.TOKEN);
