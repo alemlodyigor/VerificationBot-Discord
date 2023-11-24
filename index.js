@@ -32,6 +32,21 @@ client.on("messageCreate", async (message) => {
     );
 
     await message.react(emoji);
+
+    client.on("messageReactionAdd", async (reaction, user) => {
+      if (reaction.message.partial) await reaction.message.fetch();
+      if (reaction.partial) await reaction.fetch();
+      if (!reaction.message.guild) return;
+
+      if (reaction.emoji.name === emoji) {
+        await reaction.message.guild.members.cache
+          .get(user.id)
+          .roles.remove(unverifiedRole);
+        await reaction.message.guild.members.cache
+          .get(user.id)
+          .roles.add(verifiedRole);
+      }
+    });
   }
 });
 
