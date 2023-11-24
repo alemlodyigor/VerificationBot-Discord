@@ -47,6 +47,21 @@ client.on("messageCreate", async (message) => {
           .roles.add(verifiedRole);
       }
     });
+
+    client.on("messageReactionRemove", async (reaction, user) => {
+      if (reaction.message.partial) await reaction.message.fetch();
+      if (reaction.partial) await reaction.fetch();
+      if (!reaction.message.guild) return;
+
+      if (reaction.emoji.name === emoji) {
+        await reaction.message.guild.members.cache
+          .get(user.id)
+          .roles.remove(verifiedRole);
+        await reaction.message.guild.members.cache
+          .get(user.id)
+          .roles.add(unverifiedRole);
+      }
+    });
   }
 });
 
